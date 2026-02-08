@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Will You Be My Valentine? 💕</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    overflow: hidden;
+    background: linear-gradient(45deg,#ff6b9d,#c44569,#f1948a,#ec8c99);
+    background-size: 400% 400%;
+    animation: bgMove 8s infinite ease;
+}
+
+@keyframes bgMove {
+    0% {background-position:0% 50%;}
+    50% {background-position:100% 50%;}
+    100% {background-position:0% 50%;}
+}
+
+/* Instagram-style fade animation */
+.fade-in {
+    animation: fadeIn 1s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {opacity:0; transform:scale(0.9);}
+    to {opacity:1; transform:scale(1);}
+}
+
+h1 {
+    font-size: 3em;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* Buttons */
+.buttons {
+    display: flex;
+    gap: 25px;
+}
+
+button {
+    padding: 18px 35px;
+    font-size: 1.3em;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.1s;
+}
+
+#yesBtn {
+    background: #ff4d88;
+    color: white;
+    margin-left: -30%;
+}
+
+#yesBtn:hover {
+    transform: scale(1.1);
+}
+
+#noBtn {
+    background: #91e8ae;
+    color: white;
+    margin-left: 50%;
+    position: fixed;
+}
+
+.no-message {
+    position: fixed;
+    top: 15%;
+    font-size: 1em;
+    opacity: 0;
+}
+
+/* Love Card */
+#result {
+    display: none;
+    text-align: center;
+}
+
+.love-card {
+    width: 90vw;
+    max-width: 700px;
+    padding: 30px;
+    border-radius: 25px;
+    backdrop-filter: blur(15px);
+    background: rgba(255,255,255,0.1);
+    animation: fadeIn 1s ease forwards;
+}
+
+.love-message {
+    font-size: 1.8em;
+}
+
+/* Floating hearts */
+.heart {
+    position: fixed;
+    bottom: -20px;
+    font-size: 26px;
+    animation: floatUp 6s linear infinite;
+}
+
+@keyframes floatUp {
+    0% {transform: translateY(0); opacity:1;}
+    100% {transform: translateY(-120vh); opacity:0;}
+}
+
+/* Confetti */
+.confetti {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background: white;
+    animation: confettiFall 3s linear forwards;
+}
+
+@keyframes confettiFall {
+    to {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    body { padding: 20px; overflow-y: auto; }
+
+    h1 { font-size: 1.8em; }
+
+    .buttons {
+        flex-direction: row;
+        width: 50%;
+        align-items: center;
+    }
+
+    button {
+        width: 60%;
+        font-size: 1em;
+    }
+
+    .love-message {
+        font-size: 1.2em;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<h1 class="fade-in">Will you be my Valentine? 💝</h1>
+
+<div id="noMessage" class="no-message">Say Yes Please 😘</div>
+
+<div class="buttons fade-in" id="buttons">
+    <button id="yesBtn">Yes 🥰</button>
+    <button id="noBtn">No 😞</button>
+</div>
+
+<div id="result">
+    <div class="love-card">
+        <h2 class="love-message">
+💖🥰Yay! You just made my day the happiest one!<br>
+Being my Valentine means the world to me.<br>
+I promise to make every moment with you special. 😘💕
+        </h2>
+    </div>
+</div>
+
+<!-- Romantic Music -->
+<audio id="music" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const noBtn = document.getElementById("noBtn");
+const noMessage = document.getElementById("noMessage");
+const yesBtn = document.getElementById("yesBtn");
+const buttons = document.getElementById("buttons");
+const result = document.getElementById("result");
+const music = document.getElementById("music");
+
+/* Move No button */
+function moveButton() {
+    noMessage.style.opacity = "1";
+
+    const x = Math.random() * 50 + 10;
+    const y = Math.random() * 50 + 10;
+
+    noBtn.style.left = x + "vw";
+    noBtn.style.top = y + "vh";
+
+    setTimeout(() => noMessage.style.opacity = "0", 500);
+}
+
+noBtn.addEventListener("mouseenter", moveButton);
+noBtn.addEventListener("touchstart", e => {
+    e.preventDefault();
+    moveButton();
+});
+noBtn.addEventListener("click", moveButton);
+
+/* YES button click */
+yesBtn.addEventListener("click", () => {
+    buttons.style.display = "none";
+    result.style.display = "block";
+
+    music.play(); // play romantic music
+
+    createHearts();
+    createConfetti();
+});
+
+/* Floating hearts */
+function createHearts() {
+    for (let i = 0; i < 30; i++) {
+        setTimeout(() => {
+            const heart = document.createElement("div");
+            heart.className = "heart";
+            heart.innerHTML = "💖";
+            heart.style.left = Math.random() * 100 + "vw";
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 6000);
+        }, i * 120);
+    }
+}
+
+/* Confetti */
+function createConfetti() {
+    for (let i = 0; i < 80; i++) {
+        const confetti = document.createElement("div");
+        confetti.className = "confetti";
+        confetti.style.left = Math.random() * 100 + "vw";
+        confetti.style.background =
+            `hsl(${Math.random() * 360}, 100%, 70%)`;
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 3000);
+    }
+}
+</script>
+
+</body>
+</html>
